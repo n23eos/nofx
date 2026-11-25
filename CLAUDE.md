@@ -1,5 +1,13 @@
 # CLAUDE.md — NOFX Fork (Hyperliquid AI Trading)
 
+> **Статус проекта (2026-11-25): ПАУЗА / ВРЕМЕННО ЗАМОРОЖЕН.**
+> - **Причина заморозки:** владелец не планирует отдельно оплачивать API-токены (OpenAI/DeepSeek/Claw402), а подписку ChatGPT/Codex OAuth использовать как серверный API нельзя.
+> - **Состояние VPS (`vps-apds`):** контейнеры `nofx-trading` и `nofx-frontend` остановлены (`docker compose stop`). Файлы `.env`, `data/data.db` (аккаунт `mns.nicholas@gmail.com` и стратегия `Hyperliquid Testnet Conservative (BTC/ETH/SOL)`) сохранены. Реальные сделки не совершались, биржа не подключалась.
+> - **Как разморозить позже:**
+>   1. `ssh vps-apds 'cd /home/administrator/nofx && docker compose start && docker compose ps'`
+>   2. `ssh -N -L 3090:127.0.0.1:3090 vps-apds`
+>   3. Запустить `python3 scripts/setup_testnet_bot.py` (например, с бесплатным Gemini API / OpenRouter `:free` или локальной моделью). Альтернативно — рассмотреть CLI-агентский деск без серверного API-биллинга (напр. `galleonlabs/hypergrok-trading-desk`).
+
 Инструкция для coding-агентов (Claude Code / Codex / Antigravity) по работе с нашим форком NOFX для агентной торговли на Hyperliquid.
 
 > **Важно про `AGENTS.md` на macOS:** в корне репозитория есть upstream-файл `agents.md` (спецификация встроенного NOFXi-ассистента на китайском). На macOS (case-insensitive APFS) `AGENTS.md` и `agents.md` — один и тот же файл. **Не перезаписывай `agents.md`**, вся локальная документация форка хранится в этом `CLAUDE.md`.
