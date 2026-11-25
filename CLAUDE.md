@@ -62,12 +62,8 @@
 **Контекст проблемы:** в свежем UI (`web/src/components/trader/ExchangeConfigModal.tsx`, ~строки 1092–1104) авторы убрали ручную форму ввода Hyperliquid и оставили только `HyperliquidWalletConnect` (MetaMask/Rabby), который жёстко привязан к `testnet: false` (Mainnet). При этом бэкенд API `POST /api/exchanges` и движок `trader/hyperliquid` полностью поддерживают `testnet: true` (`https://api.hyperliquid-testnet.xyz`).
 
 Что сделать агенту:
-- [ ] Написать безопасный локальный CLI-скрипт (например, `scripts/add_hl_testnet.py` — только stdlib Python, без внешних зависимостей), который:
-  1. Запрашивает интерактивно через `input()` / `getpass()` (без аргументов командной строки и без печати в stdout): URL NOFX (по умолчанию `http://127.0.0.1:3090`), email/пароль NOFX, адрес основного кошелька Hyperliquid Testnet, приватник Agent Wallet (автоматически убирает `0x` при наличии) и имя аккаунта (например `Hyperliquid Testnet`).
-  2. Логинится в NOFX (`POST /api/login`), получает JWT.
-  3. Проверяет `TRANSPORT_ENCRYPTION` (сейчас `false` в `.env`), отправляет `POST /api/exchanges` с `exchange_type: "hyperliquid"`, `testnet: true`, `enabled: true`, `hyperliquid_unified_account: true`, `hyperliquid_builder_approved: true`.
-  4. Проверяет, что аккаунт появился в `GET /api/exchanges` с флагом `testnet: true`, и проверяет доступность баланса через API.
-- [ ] Провести владельца через запуск скрипта и проверить, что аккаунт `Hyperliquid Testnet` отображается в UI с бейджем `· Testnet` и выбирается в **Autopilot**.
+- [x] Написан безопасный локальный CLI-скрипт `scripts/add_hl_testnet.py` (stdlib Python, скрытый ввод через `getpass`, проверка баланса и агента на `api.hyperliquid-testnet.xyz/info`, отправка `POST /api/exchanges` с `testnet: true`).
+- [ ] Провести владельца через запуск `python3 scripts/add_hl_testnet.py` и проверить, что аккаунт `Hyperliquid Testnet` отображается в UI с бейджем `· Testnet` и выбирается в **Autopilot**.
 
 > Примечание: **Frontier** (`api/handler_planning.go:163`) ограничивает живое исполнение только Mainnet (`if ex.Testnet`), хотя строить планы/аналитику в Frontier можно без биржи. Для тестовых сделок использовать **Autopilot**. Если позже понадобится Testnet и в Frontier — это отдельная небольшая правка `api/handler_planning.go`.
 
