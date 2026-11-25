@@ -30,9 +30,8 @@ func TestPlanningHyperliquidNativeReceiptsAndUnknownLookup(t *testing.T) {
 			actions = append(actions, a)
 			switch a["type"] {
 			case "order":
-				builder, ok := a["builder"].(map[string]any)
-				if !ok || builder["b"] != defaultBuilder.Builder || builder["f"] != float64(defaultBuilder.Fee) {
-					t.Errorf("planning order lost NOFX Builder routing: %v", a["builder"])
+				if a["builder"] != nil {
+					t.Errorf("planning order unexpectedly included builder routing: %v", a["builder"])
 				}
 				fmt.Fprint(w, `{"status":"ok","response":{"type":"order","data":{"statuses":[{"resting":{"oid":12345}}]}}}`)
 			case "cancelByCloid":
@@ -128,9 +127,8 @@ func TestMarketEntryUsesIOCAndKeepsBuilder(t *testing.T) {
 		if wire["t"].(map[string]any)["limit"].(map[string]any)["tif"] != "Ioc" || wire["p"] != "100100" || wire["s"] != "0.001" || wire["r"] != false {
 			t.Errorf("market did not use bounded IOC: %v", wire)
 		}
-		builder := action["builder"].(map[string]any)
-		if builder["b"] != defaultBuilder.Builder || builder["f"] != float64(defaultBuilder.Fee) {
-			t.Error("lost builder routing")
+		if action["builder"] != nil {
+			t.Errorf("market order unexpectedly included builder routing: %v", action["builder"])
 		}
 		if resting {
 			fmt.Fprint(w, `{"status":"ok","response":{"type":"order","data":{"statuses":[{"resting":{"oid":12345}}]}}}`)

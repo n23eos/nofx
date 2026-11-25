@@ -36,10 +36,10 @@ services:
       start_period: 60s
 
   # Frontend service (static serving and proxy)
+  # Uses the published frontend image because web/vendor/charting is a private
+  # TradingView submodule unavailable to external forks.
   nofx-frontend:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.frontend
+    image: ghcr.io/nofxaios/nofx/nofx-frontend:stable
     container_name: nofx-frontend
     restart: unless-stopped
     ports:

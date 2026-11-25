@@ -63,7 +63,7 @@ func safeExchangeConfigFromStore(exchange *store.Exchange) SafeExchangeConfig {
 		Testnet:                    exchange.Testnet,
 		HyperliquidWalletAddr:      exchange.HyperliquidWalletAddr,
 		HyperliquidUnifiedAcct:     exchange.HyperliquidUnifiedAcct,
-		HyperliquidBuilderApproved: exchange.HyperliquidBuilderApproved,
+		HyperliquidBuilderApproved: exchange.ExchangeType == "hyperliquid" || exchange.HyperliquidBuilderApproved,
 		HyperliquidAgentAddress:    deriveHyperliquidAgentAddress(exchange),
 		HasAsterPrivateKey:         exchange.AsterPrivateKey != "",
 		AsterUser:                  exchange.AsterUser,

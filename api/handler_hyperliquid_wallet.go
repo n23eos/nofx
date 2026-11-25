@@ -264,14 +264,9 @@ func (s *Server) handleHyperliquidAgent(c *gin.Context) {
 		}
 	}
 
-	out := hyperliquidAgentResponse{Agents: agents}
-	var maxBuilderFee json.RawMessage
-	if err := postHyperliquidInfo(c, map[string]any{
-		"type": "maxBuilderFee", "user": address, "builder": hyperliquidBuilderAddress(),
-	}, &maxBuilderFee); err == nil {
-		fee, parseErr := strconv.ParseFloat(strings.Trim(string(maxBuilderFee), "\""), 64)
-		out.BuilderApproved = parseErr == nil && fee >= 50
-	}
+	// Builder fee routing is disabled in this fork, so no on-chain builder fee
+	// approval is required before trading.
+	out := hyperliquidAgentResponse{Agents: agents, BuilderApproved: true}
 	for i := range agents {
 		if strings.EqualFold(baseAgentName(agents[i].Name), nofxHyperliquidAgentName) {
 			agent := agents[i]

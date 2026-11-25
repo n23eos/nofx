@@ -149,13 +149,8 @@ func TestDescribeExchangeConfigIssue(t *testing.T) {
 		APIKey:                crypto.EncryptedString(testClaw402Key),
 		HyperliquidWalletAddr: "0x1111111111111111111111111111111111111111",
 	}
-	if _, code := describeExchangeConfigIssue(unapproved); code != "HYPERLIQUID_BUILDER_NOT_APPROVED" {
-		t.Fatalf("builder unapproved: expected HYPERLIQUID_BUILDER_NOT_APPROVED, got %s", code)
-	}
-
-	unapproved.HyperliquidBuilderApproved = true
 	if _, code := describeExchangeConfigIssue(unapproved); code != "" {
-		t.Fatalf("ready exchange: expected no issue, got %s", code)
+		t.Fatalf("builder fee disabled in fork: expected no issue, got %s", code)
 	}
 }
 
