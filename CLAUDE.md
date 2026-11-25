@@ -62,8 +62,10 @@
 **Контекст проблемы:** в свежем UI (`web/src/components/trader/ExchangeConfigModal.tsx`, ~строки 1092–1104) авторы убрали ручную форму ввода Hyperliquid и оставили только `HyperliquidWalletConnect` (MetaMask/Rabby), который жёстко привязан к `testnet: false` (Mainnet). При этом бэкенд API `POST /api/exchanges` и движок `trader/hyperliquid` полностью поддерживают `testnet: true` (`https://api.hyperliquid-testnet.xyz`).
 
 Что сделать агенту:
-- [x] Написан безопасный локальный CLI-скрипт `scripts/add_hl_testnet.py` (stdlib Python, скрытый ввод через `getpass`, проверка баланса и агента на `api.hyperliquid-testnet.xyz/info`, отправка `POST /api/exchanges` с `testnet: true`).
-- [ ] Провести владельца через запуск `python3 scripts/add_hl_testnet.py` и проверить, что аккаунт `Hyperliquid Testnet` отображается в UI с бейджем `· Testnet` и выбирается в **Autopilot**.
+- [x] Разблокированы прямые провайдеры AI API-ключей (`openai`, `deepseek`, `claude`, `gemini`, `qwen`, `custom`/OpenRouter) в `api/handler_ai_model.go`.
+- [x] Создана консервативная стратегия `Hyperliquid Testnet Conservative (BTC/ETH/SOL)` в SQLite на `vps-apds` (бесплатные рыночные данные, плечо до 3x/2x, max 2 позиции, max 30% маржи).
+- [x] Написан единый CLI-мастер `scripts/setup_testnet_bot.py` (подключает AI API-ключ + Hyperliquid Testnet Agent Wallet + создаёт и запускает Autopilot-трейдера в обход залоченного UI).
+- [ ] Владелец запускает `python3 scripts/setup_testnet_bot.py`, после чего агент проверяет первый цикл, логи и исполнение ордеров на `vps-apds`.
 
 > Примечание: **Frontier** (`api/handler_planning.go:163`) ограничивает живое исполнение только Mainnet (`if ex.Testnet`), хотя строить планы/аналитику в Frontier можно без биржи. Для тестовых сделок использовать **Autopilot**. Если позже понадобится Testnet и в Frontier — это отдельная небольшая правка `api/handler_planning.go`.
 

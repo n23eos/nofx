@@ -68,6 +68,12 @@ func (s *Server) handleGetModelConfigs(c *gin.Context) {
 	if len(models) == 0 {
 		logger.Infof("⚠️ No AI models in database, returning defaults")
 		defaultModels := []SafeModelConfig{
+			{ID: "openai", Name: "OpenAI", Provider: "openai", Enabled: false, HasAPIKey: false},
+			{ID: "deepseek", Name: "DeepSeek AI", Provider: "deepseek", Enabled: false, HasAPIKey: false},
+			{ID: "claude", Name: "Claude AI", Provider: "claude", Enabled: false, HasAPIKey: false},
+			{ID: "gemini", Name: "Gemini AI", Provider: "gemini", Enabled: false, HasAPIKey: false},
+			{ID: "qwen", Name: "Qwen AI", Provider: "qwen", Enabled: false, HasAPIKey: false},
+			{ID: "custom", Name: "Custom / OpenRouter", Provider: "custom", Enabled: false, HasAPIKey: false},
 			{ID: "claw402", Name: "Claw402 (Base USDC)", Provider: "claw402", Enabled: false, HasAPIKey: false},
 		}
 		c.JSON(http.StatusOK, defaultModels)
@@ -109,6 +115,12 @@ func (s *Server) handleGetModelConfigs(c *gin.Context) {
 	if len(safeModels) == 0 {
 		logger.Infof("⚠️ No visible AI models in database, returning defaults")
 		defaultModels := []SafeModelConfig{
+			{ID: "openai", Name: "OpenAI", Provider: "openai", Enabled: false, HasAPIKey: false},
+			{ID: "deepseek", Name: "DeepSeek AI", Provider: "deepseek", Enabled: false, HasAPIKey: false},
+			{ID: "claude", Name: "Claude AI", Provider: "claude", Enabled: false, HasAPIKey: false},
+			{ID: "gemini", Name: "Gemini AI", Provider: "gemini", Enabled: false, HasAPIKey: false},
+			{ID: "qwen", Name: "Qwen AI", Provider: "qwen", Enabled: false, HasAPIKey: false},
+			{ID: "custom", Name: "Custom / OpenRouter", Provider: "custom", Enabled: false, HasAPIKey: false},
 			{ID: "claw402", Name: "Claw402 (Base USDC)", Provider: "claw402", Enabled: false, HasAPIKey: false},
 		}
 		c.JSON(http.StatusOK, defaultModels)
@@ -242,8 +254,14 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 
 // handleGetSupportedModels Get list of AI models supported by the system
 func (s *Server) handleGetSupportedModels(c *gin.Context) {
-	// Return static list of supported AI models with default versions
+	// Fork: re-enable direct API-key providers alongside Claw402.
 	supportedModels := []map[string]interface{}{
+		{"id": "openai", "name": "OpenAI", "provider": "openai", "defaultModel": "gpt-5.4"},
+		{"id": "deepseek", "name": "DeepSeek AI", "provider": "deepseek", "defaultModel": "deepseek-chat"},
+		{"id": "claude", "name": "Claude AI", "provider": "claude", "defaultModel": "claude-sonnet-4-5"},
+		{"id": "gemini", "name": "Gemini AI", "provider": "gemini", "defaultModel": "gemini-2.5-flash"},
+		{"id": "qwen", "name": "Qwen AI", "provider": "qwen", "defaultModel": "qwen3-max"},
+		{"id": "custom", "name": "Custom / OpenRouter", "provider": "custom", "defaultModel": "openai/gpt-4.1-mini"},
 		{"id": "claw402", "name": "Claw402 (Base USDC)", "provider": "claw402", "defaultModel": "gpt-5.6"},
 	}
 
